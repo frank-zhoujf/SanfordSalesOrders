@@ -6,6 +6,7 @@ This solution contains two Azure Functions (.Net 6 and Azure Function V4):
 
 Instructions to run this application:
 1. In order to run this application locally, you need to create local.settings.json file in the same folder as host.json with the content as below:
+```JSON
 {
   "IsEncrypted": false,
   "Values": {
@@ -15,6 +16,7 @@ Instructions to run this application:
     "CosmosConnectionString": ""
   }
 }
+```
 2. Create service bus queue namespace and new queue 'salesordersqueue' in Azure Portal
 3. Under the service bus namespace, go to 'Shared access policies' and click 'RootManageSharedAccessKey', copy the 'Primary Connection String' and paste it in the local.settings.json (Values -> AzureWebJobsServiceBus)
 4. Create Cosmos DB account in Azure Portal and also create couple of things below:
@@ -23,27 +25,27 @@ containerName: ProductionOrderContainer
 5. Go to the Cosmos DB account just created, click 'Keys' under 'Settings' and copy the 'PRIMARY CONNECTION STRING', paste it in the local.settings.json (Values -> CosmosConnectionString)
 6. Build and run the application in Visual Studio locally and waiting for the console window pop up
 7. Copy the url from there, the URL is something like 'http://localhost:7291/api/SendSalesOrderToQueue', do a post request on that URL in Postman with the body as below:
-
+```JSON
 {
-	"salesOrderId" : "1234",
-	"customer" : "John Dee",
-	"orderdate" : "2023-05-11T16:48:23+12:00",
-	"salesOrderItems" : [
-		{
-			"productid" : "ABC",
-			"orderedqty" : 12.0,
-			"unitprice" : 3.21
-		},
-		{
-			"productid" : "XYZ",
-			"orderedqty" : 8.0,
-			"unitprice" : 12.34
-		}
-	]
+    "salesOrderId" : "1234",
+    "customer" : "John Dee",
+    "orderdate" : "2023-05-11T16:48:23+12:00",
+    "salesOrderItems" : [
+      {
+	"productid" : "ABC",
+	"orderedqty" : 12.0,
+	"unitprice" : 3.21
+      },
+      {
+	"productid" : "XYZ",
+	"orderedqty" : 8.0,
+	"unitprice" : 12.34
+      }
+    ]
 }
-
+```
 8. You should be able to see the production order in the Cosmos DB if everything is running fine (either in Azure Portal or add Cosmos DB service dependency in Visual Studio), the production order is in JSON format and looks something like this:
-
+```JSON
 {
     "id": "df7a0a24-eb4e-4a48-a31e-408eece94fd3",
     "salesOrderId": "1234",
@@ -68,7 +70,7 @@ containerName: ProductionOrderContainer
     "_attachments": "attachments/",
     "_ts": 1683895943
 }
-
+```
 9. Feel free to test different sales orders, you should be able to see the error messages through the console window if it's an invalid sales order and this order will be deleted from the queue after the execution is done.
 
 If I got more time, I will probably add the front end UI with Web API to send the message to service bus queue to increase the user experience and use the cosmos db client through dependency injection instead of the output binding.
