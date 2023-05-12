@@ -43,6 +43,7 @@ containerName: ProductionOrderContainer
 }
 
 8. You should be able to see the production order in the Cosmos DB if everything is running fine (either in Azure Portal or add Cosmos DB service dependency in Visual Studio), the production order is in JSON format and looks something like this:
+
 {
     "id": "df7a0a24-eb4e-4a48-a31e-408eece94fd3",
     "salesOrderId": "1234",
@@ -67,6 +68,7 @@ containerName: ProductionOrderContainer
     "_attachments": "attachments/",
     "_ts": 1683895943
 }
+
 9. Feel free to test different sales orders, you should be able to see the error messages through the console window if it's an invalid sales order and this order will be deleted from the queue after the execution is done.
 
 If I got more time, I will probably add the front end UI with Web API to send the message to service bus queue to increase the user experience and use the cosmos db client through dependency injection instead of the output binding.
